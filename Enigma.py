@@ -61,11 +61,36 @@ class Enigma:
 rotor_1 = [4, 10, 12, 5, 11, 6, 3, 16, 21, 25, 13, 19, 14, 22, 24, 7, 23, 20, 18, 15, 0, 8, 1, 17, 2, 9]
 rotor_2 = [0, 9, 3, 10, 18, 8, 17, 20, 23, 1, 11, 7, 22, 19, 12, 2, 16, 6, 25, 13, 15, 24, 5, 21, 14, 4]
 rotor_3 = [1, 4, 11, 13, 12, 3, 7, 17, 0, 5, 10, 16, 9, 14, 8, 6, 25, 24, 23, 22, 21, 20, 19, 18, 15, 2]
+rotor_4 = [5, 11, 13, 9, 24, 15, 0, 2, 18, 20, 12, 14, 16, 4, 21, 22, 1, 3, 10, 6, 19, 25, 7, 23, 8, 17]
+rotor_5 = [25, 0, 8, 17, 20, 5, 10, 24, 7, 2, 1, 21, 11, 14, 18, 3, 9, 22, 19, 6, 13, 4, 23, 15, 12, 16]
 reflector = [24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19]
+
+def are_rotors_unique(selected_rotor_1, selected_rotor_2, selected_rotor_3):
+    return len({selected_rotor_1, selected_rotor_2, selected_rotor_3}) == 3
+    
+def selectRotor(selected_rotor_1, selected_rotor_2, selected_rotor_3):
+    rotors = [rotor_1, rotor_2, rotor_3, rotor_4, rotor_5]
+    return [rotors[selected_rotor_1 - 1], rotors[selected_rotor_2 - 1], rotors[selected_rotor_3 - 1]]
 
 def main():
 
     while(True):
+        
+        try:
+            print()
+            print("Select 3 Rotors\n1. Rotor 1\n2. Rotor 2\n3. Rotor 3\n4. Rotor 4\n5. Rotor 5\n")
+            selected_rotor_1 = int(input("Enter a number 1 - 5 to select rotor No.1 : "))
+            selected_rotor_2 = int(input("Enter a number 1 - 5 to select rotor No.2 : "))
+            selected_rotor_3 = int(input("Enter a number 1 - 5 to select rotor No.3 : "))
+            result = are_rotors_unique(selected_rotor_1, selected_rotor_2, selected_rotor_3)
+            if result != True:
+                print("Rotors must be unique.")
+                break
+        except ValueError:
+            print("Invalid input")
+            continue
+        
+        selectedRotorsArray = selectRotor(selected_rotor_1, selected_rotor_2, selected_rotor_3)
         
         try:
             print()
@@ -80,22 +105,25 @@ def main():
             print("Rotor positions must be integers between 0 and 25.")
             continue
         
-        enigma_machine = Enigma(rotor_1, rotor_2, rotor_3, reflector, set_rotor_1, set_rotor_2, set_rotor_3)
+        # unpack array *selectedRotorsArray
+        enigma_machine = Enigma(*selectedRotorsArray, reflector, set_rotor_1, set_rotor_2, set_rotor_3)
         
         ascii = string.ascii_uppercase
+        symbols = ".?'!,&%@ "
+        numbers = "1234567890"
         
         plain_text = input("Plain Text : ").upper()
         
         for letter in plain_text:
-            if letter not in ascii and letter != " ":
+            if letter not in ascii and letter not in symbols and letter not in numbers:
                 print("The input must be English Alphabet")
                 return
+    
+        encrypted_message = enigma_machine.encrypt_text(plain_text)
+        
+        print("Encrypted/Decrypted message:", encrypted_message)
+        print()
         break
-    
-    encrypted_message = enigma_machine.encrypt_text(plain_text)
-    
-    print("Encrypted/Decrypted message:", encrypted_message)
-    print()
 
 if __name__ == "__main__":
     main()
