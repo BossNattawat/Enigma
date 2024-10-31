@@ -82,11 +82,16 @@ def main():
             selected_rotor_1 = int(input("Enter a number 1 - 5 to select rotor No.1 : "))
             selected_rotor_2 = int(input("Enter a number 1 - 5 to select rotor No.2 : "))
             selected_rotor_3 = int(input("Enter a number 1 - 5 to select rotor No.3 : "))
+            
+            if not (0 < selected_rotor_1 <= 5 and 0 < selected_rotor_2 <= 5 and 0 < selected_rotor_3 <= 5):
+                raise ValueError
+            
             result = are_rotors_unique(selected_rotor_1, selected_rotor_2, selected_rotor_3)
             if result != True:
                 print("Rotors must be unique.")
                 break
         except ValueError:
+            print()
             print("Invalid input")
             continue
         
