@@ -114,8 +114,8 @@ def main():
         enigma_machine = Enigma(*selectedRotorsArray, reflector, set_rotor_1, set_rotor_2, set_rotor_3)
         
         ascii = string.ascii_uppercase
-        symbols = ".?'!,&%@ "
-        numbers = "1234567890"
+        symbols = string.printable
+        numbers = string.digits
         
         plain_text = input("Plain Text : ").upper()
         
@@ -126,8 +126,7 @@ def main():
     
         encrypted_message = enigma_machine.encrypt_text(plain_text)
         
-        print("Encrypted/Decrypted message:", encrypted_message)
-        print()
+        print(f"Encrypted/Decrypted message: {encrypted_message}\n")
         break
 
 if __name__ == "__main__":
